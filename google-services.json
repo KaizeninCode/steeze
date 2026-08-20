@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "702940194926",
+    "project_id": "steeze-b70ec",
+    "storage_bucket": "steeze-b70ec.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702940194926:android:7cc10eeb0020e90d8f5e7f",
+        "android_client_info": {
+          "package_name": "com.steeze"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702940194926-9am88ljttbogpe0onbpn7ngfrnj7n2r8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOVV2A7eOKBON_coLenOO0QXeI86pqL0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "702940194926-9am88ljttbogpe0onbpn7ngfrnj7n2r8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
