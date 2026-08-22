@@ -1,6 +1,6 @@
 import { RoundState } from './../types/index';
 import { firestore } from "@/firebaseCofig";
-import { doc, onSnapshot, setDoc } from "@react-native-firebase/firestore";
+import { doc, onSnapshot, setDoc, deleteDoc } from "@react-native-firebase/firestore";
 import { useEffect,useState } from "react";
 
 export function useRoundState(roomId: string | null){
@@ -24,5 +24,10 @@ export function useRoundState(roomId: string | null){
     await setDoc(doc(firestore, 'rooms', roomId, 'state', 'current'), next)
   }
 
-  return {roundState, updateRoundState}
+  async function deleteRoundState(){
+    if (!roomId) return
+    await deleteDoc(doc(firestore, 'rooms', roomId, 'state', 'current'))
+  }
+
+  return {roundState, updateRoundState, deleteRoundState}
 }

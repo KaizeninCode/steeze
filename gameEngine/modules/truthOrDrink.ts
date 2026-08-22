@@ -4,12 +4,13 @@ import { GameModule } from "./../GameModule";
 export const truthOrDrinkModule: GameModule = {
   config: GAME_CONFIGS["truth-or-drink"],
   nextCard(deckCards, round) {
-    const usedIds = new Set(round.responses.map((r) => r.responseCardId));
+    const usedIds = new Set(round.usedCardIds);
     const next = deckCards.find((c) => !usedIds.has(c.id));
     return {
       ...round,
       currentCardId: next?.id ?? null,
-      roundNumber: round.roundNumber,
+      usedCardIds: next ? [...round.usedCardIds, next.id] : round.usedCardIds,
+      roundNumber: round.roundNumber + 1,
     };
   },
   handleAction(round, playerId, payload) {
@@ -38,7 +39,7 @@ export const truthOrDrinkModule: GameModule = {
   },
   isRoundOver(round, deckCards) {
     return (
-      round.currentCardId === null || round.roundNumber >= deckCards.length
+      round.currentCardId === null || round.usedCardIds.length >= deckCards.length
     );
   },
 };

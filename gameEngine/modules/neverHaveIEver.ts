@@ -8,10 +8,14 @@ function shuffleCards(ids:string[]): string[] {
 export const neverHaveIEverModule: GameModule = {
   config: GAME_CONFIGS["never-have-i-ever"],
   nextCard(deckCards, round) {
-    const order = round.cardOrder.length > 0 ? round.cardOrder : shuffleCards(deckCards.map(c => c.id))
-    const newIndex = round.roundNumber + 1
-    const nextId = order[newIndex] ?? null
-    return {...round, cardOrder: order, currentCardId: nextId, roundNumber: newIndex}
+    const usedIds = new Set(round.responses.map((r) => r.responseCardId));
+    const next = deckCards.find((c) => !usedIds.has(c.id));
+    return {
+      ...round,
+      currentCardId: next?.id ?? null,
+      usedCardIds: next ? [...round.usedCardIds, next.id] : round.usedCardIds,
+      roundNumber: round.roundNumber + 1,
+    };
   },
   handleAction(round, playerId, payload) {
     const { hasDone } = payload as { hasDone: boolean };
@@ -19,7 +23,7 @@ export const neverHaveIEverModule: GameModule = {
     return {
       ...round,
       responses: [
-        ...round.responses,
+        ...responses,
         {
           playerId,
           responseCardId: round.currentCardId,
@@ -42,7 +46,7 @@ export const neverHaveIEverModule: GameModule = {
   },
   isRoundOver(round, deckCards) {
     return (
-      round.currentCardId === null || round.roundNumber >= round.cardOrder.length - 1
+      round.currentCardId === null || round.usedCardIds.length >= deckCards.length
     );
   },
 };

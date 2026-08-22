@@ -20,6 +20,9 @@ const RoundEnd = () => {
   const localRoom = useLocalRoomStore((state) => state.room);
   const setLocalRoundState = useLocalRoomStore((state) => state.setRoundState);
   const updateLocalPlayers = useLocalRoomStore((state) => state.updatePlayers);
+  const clearLocalRoundState = useLocalRoomStore(
+    (state) => state.clearRoundState,
+  );
 
   const room = isLocal ? localRoom : onlineRoomData.room;
   // console.log("store room before round end:", room);
@@ -38,18 +41,18 @@ const RoundEnd = () => {
   );
 
   async function persistRoundState(next: RoundState) {
-  // console.log('persistRoundState called with:', next);
-  if (isLocal) {
-    setLocalRoundState(next);
-  } else {
-    try {
-      await onlineRound.updateRoundState(next);
-      // console.log('persistRoundState: Firestore write succeeded');
-    } catch (err) {
-      // console.error('persistRoundState: Firestore write FAILED', err);
+    // console.log('persistRoundState called with:', next);
+    if (isLocal) {
+      setLocalRoundState(next);
+    } else {
+      try {
+        await onlineRound.updateRoundState(next);
+        // console.log('persistRoundState: Firestore write succeeded');
+      } catch (err) {
+        // console.error('persistRoundState: Firestore write FAILED', err);
+      }
     }
   }
-}
 
   async function persistPlayers(updatedPlayers: Player[]) {
     isLocal
@@ -65,6 +68,7 @@ const RoundEnd = () => {
     const fresh: RoundState = {
       roomId,
       cardOrder: [],
+      usedCardIds: [],
       currentCardId: null,
       currentReaderId: room!.players[0]?.playerId ?? null,
       responses: [],
@@ -76,6 +80,12 @@ const RoundEnd = () => {
     const dealt = gameModule.nextCard(deckCards, fresh);
     // console.log('[RoundEnd] dealt:', dealt);
     await persistRoundState(dealt);
+
+    if (isLocal) {
+      clearLocalRoundState();
+    } else {
+      await onlineRound.deleteRoundState();
+    }
     router.push({ pathname: "/gameplay/[roomId]", params: { roomId } });
   }
 
@@ -83,6 +93,12 @@ const RoundEnd = () => {
   async function handleSwitchGame() {
     const resetPlayers = room!.players.map((p) => ({ ...p, score: 0 }));
     await persistPlayers(resetPlayers);
+
+    if (isLocal) {
+      clearLocalRoundState();
+    } else {
+      await onlineRound.deleteRoundState();
+    }
     router.push({ pathname: "/mode-select/[roomId]", params: { roomId } });
   }
 

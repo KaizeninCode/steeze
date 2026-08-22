@@ -53,6 +53,7 @@ export interface RoundState {
     voterId: string
     votedForPlayerId: string
   }[]
+  usedCardIds: string[]
   timerEndsAt: number | null
   roundNumber: number
 }

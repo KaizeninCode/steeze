@@ -14,6 +14,7 @@ interface LocalRoomState {
   updatePlayers: (players:Player[]) => void
   setActiveGame: (gameId:string) => void;
   setRoundState: (state: RoundState) => void
+  clearRoundState: () => void
   reset: () => void;
 }
 
@@ -80,5 +81,6 @@ export const useLocalRoomStore = create<LocalRoomState>((set) => ({
       }
     }
   }),
+  clearRoundState: () => set(state => ({ ...state, roundState: null })),
   reset: () => set({room: null}),
 }));
