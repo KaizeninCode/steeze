@@ -31,19 +31,19 @@ export default function SoloRevealChecklist({
             key={player.playerId}
             className="flex flex-row items-center justify-between gap-5"
           >
-            <Text>{player.displayName}</Text>
+            <Text className="dark:text-light text-dark">{player.displayName}</Text>
             <View className="flex flex-row gap-5">
               <Pressable
-                className={`py-2 px-4 rounded-lg bg-[#eee] ${answer === "yes" ? "bg-[#2e7d32]" : "bg-[#eee]"}`}
+                className={`py-2 px-4 rounded-lg ${answer === "yes" ? "dark:bg-light bg-dark" : "bg-[#eee]"}`}
                 onPress={() => onToggle(player.playerId, true)}
               >
-                <Text className="font-medium">Yes</Text>
+                <Text className="font-medium dark:text-dark text-light">Yes</Text>
               </Pressable>
               <Pressable
-                className={`py-2 px-4 rounded-lg bg-[#eee] ${answer === "yes" ? "bg-[#2e7d32]" : "bg-[#eee]"}`}
+                className={`py-2 px-4 rounded-lg ${answer === "no" ? "dark:bg-light bg-dark" : "bg-[#eee]"}`}
                 onPress={() => onToggle(player.playerId, true)}
               >
-                <Text className="font-medium">No</Text>
+                <Text className="font-medium dark:text-dark text-light">No</Text>
               </Pressable>
             </View>
           </View>

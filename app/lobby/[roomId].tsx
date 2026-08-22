@@ -68,17 +68,17 @@ const Lobby = () => {
   }
 
   return (
-    <SafeAreaView className="flex-1 p-5">
+    <SafeAreaView className="flex-1 p-5 dark:bg-dark bg-light">
       {!isLocal && (
-        <Text className="text-xl font-semibold">Room code: {roomId}</Text>
+        <Text className="text-xl font-semibold dark:text-light text-dark">Room code: {roomId}</Text>
       )}
 
       <FlatList
         data={room.players}
         keyExtractor={(p) => p.playerId}
         renderItem={({ item }) => (
-          <View className="py-1.5">
-            <Text className="text-md">
+          <View className="py-2 dark:bg-light/60 bg-dark/10 rounded-xl">
+            <Text className="text-md dark:text-light text-dark">
               {item.displayName}
               {item.isHost ? " (host)" : ""}
             </Text>
@@ -90,26 +90,26 @@ const Lobby = () => {
         <View className="flex flex-row gap-2">
           <TextInput
             placeholder="Add player name"
-            placeholderTextColor="#000"
+            placeholderTextColor="#ccc"
             value={newPlayerName}
             onChangeText={setNewPlayerName}
             className="flex-1 border border-[#ccc] rounded-lg p-2.5"
           />
           <Pressable
-            className="py-2.5 px-4 rounded-lg bg-[#1d1b33]"
+            className="py-2.5 px-4 rounded-lg dark:bg-light bg-dark"
             onPress={handleAddLocalPlayer}
           >
-            <Text className="text-white">Add</Text>
+            <Text className="dark:text-light text-dark">Add</Text>
           </Pressable>
         </View>
       )}
 
       {isHost && (
         <Pressable
-          className="py-2.5 px-4 rounded-lg bg-[#1d1b33]"
+          className="py-2.5 px-4 rounded-lg dark:bg-light bg-dark w-3/5 mx-auto"
           onPress={handleChooseGame}
         >
-          <Text className="text-white text-center">Choose a game</Text>
+          <Text className="dark:text-dark text-light text-center">Choose a game</Text>
         </Pressable>
       )}
       

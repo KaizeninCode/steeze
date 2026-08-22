@@ -18,9 +18,9 @@ const VoteList = ({players, roundState, currentPlayerId, onVote}: Props) => {
   return (
     <SafeAreaView className='flex-1 p-5 items-start w-full justify-center'>
       {players.map(p => (
-        <Pressable className={`flex flex-row justify-between gap-4 p-3 rounded-lg  ${myVote === p.playerId ? 'bg-[#1d1b33] text-white' : 'bg-[#f1efe8]'}`} key={p.playerId} onPress={() => onVote(p.playerId)}>
-          <Text className={`${myVote === p.playerId && 'text-white'}`}>{p.displayName}</Text>
-          <Text className={`${myVote === p.playerId && 'text-white'}`}>{tally[p.playerId] ?? 0}</Text>
+        <Pressable className={`flex flex-row justify-between gap-4 p-3 rounded-lg  ${myVote === p.playerId ? 'dark:bg-light bg-dark dark:text-dark text-light' : 'bg-[#f1efe8]'}`} key={p.playerId} onPress={() => onVote(p.playerId)}>
+          <Text className={`${myVote === p.playerId && 'dark:text-dark text-light'}`}>{p.displayName}</Text>
+          <Text className={`${myVote === p.playerId && 'dark:text-dark text-light'}`}>{tally[p.playerId] ?? 0}</Text>
         </Pressable>
       ))}
     </SafeAreaView>

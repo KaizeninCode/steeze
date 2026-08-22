@@ -105,26 +105,26 @@ const RoundEnd = () => {
   const ranked = [...room.players].sort((a, b) => b.score - a.score);
 
   return (
-    <SafeAreaView className="flex-1 p-5 gap-4">
-      <Text className="text-center text-xl">Round Complete</Text>
+    <SafeAreaView className="flex-1 p-5 gap-4 dark:bg-dark bg-light">
+      <Text className="text-center text-3xl dark:text-light text-dark">Round Complete</Text>
       <FlatList
         data={ranked}
         keyExtractor={(p) => p.playerId}
         renderItem={({ item }) => (
           <View className="flex flex-row gap-5 items-center py-2">
-            <Text>{item.displayName}</Text>
-            <Text className="font-semibold">{item.score}</Text>
+            <Text className="dark:text-light text-dark">{item.displayName}</Text>
+            <Text className="font-semibold dark:text-light text-dark">{item.score}</Text>
           </View>
         )}
       />
       <Pressable
-        className="py-3 rounded-xl bg-[#1d1b33] items-center"
+        className="py-3 rounded-xl dark:bg-light bg-dark items-center w-3/5 mx-auto"
         onPress={handlePlayAgain}
       >
-        <Text className="text-white font-medium">Play Another Round</Text>
+        <Text className="dark:text-dark text-light font-medium">Play Another Round</Text>
       </Pressable>
       <Pressable className="py-3 items-center" onPress={handleSwitchGame}>
-        <Text className="text-[#1d1b33] font-medium">Switch Game</Text>
+        <Text className="dark:text-light text-dark font-medium">Switch Game</Text>
       </Pressable>
     </SafeAreaView>
   );

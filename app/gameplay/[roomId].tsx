@@ -87,7 +87,7 @@ const Gameplay = () => {
     if (!roundState || !room) return;
     // score the card that's about to be left behind
     const scoredPlayers = gameModule.applyScoring(room.players, roundState);
-    console.log("scored players:", scoredPlayers);
+    // console.log("scored players:", scoredPlayers);
     await persistPlayers(scoredPlayers);
 
     if (gameModule.isRoundOver(roundState, deckCards)) {
@@ -97,9 +97,9 @@ const Gameplay = () => {
     }
 
     const advanced = gameModule.nextCard(deckCards, roundState);
-    console.log("BEFORE advance, currentCardId was:", roundState.currentCardId);
-    console.log("AFTER advance, currentCardId is:", advanced.currentCardId);
-    console.log("advanced.usedCardIds:", advanced.usedCardIds);
+    // console.log("BEFORE advance, currentCardId was:", roundState.currentCardId);
+    // console.log("AFTER advance, currentCardId is:", advanced.currentCardId);
+    // console.log("advanced.usedCardIds:", advanced.usedCardIds);
     await persistRoundState(advanced);
   }
 
@@ -150,26 +150,26 @@ const Gameplay = () => {
     gameModule.config.primitives.cardFlow === "vote" &&
     roundState!.votes.length < room!.players.length;
 
-  console.log("deckIds:", room.settings.deckIds);
-  console.log("deckCards.length:", deckCards.length);
-  console.log("roundState.currentCardId:", roundState.currentCardId);
-  console.log("roundState.usedCardIds:", roundState.usedCardIds);
+  // console.log("deckIds:", room.settings.deckIds);
+  // console.log("deckCards.length:", deckCards.length);
+  // console.log("roundState.currentCardId:", roundState.currentCardId);
+  // console.log("roundState.usedCardIds:", roundState.usedCardIds);
 
   const currentCard = deckCards.find((c) => c.id === roundState.currentCardId);
-  console.log("currentCard:", currentCard);
+  // console.log("currentCard:", currentCard);
 
   return (
-    <SafeAreaView className="flex-1 p-5 items-center justify-center gap-5">
+    <SafeAreaView className="flex-1 p-5 items-center justify-center gap-5 dark:bg-dark bg-light">
       <Text className="text-center text-sm text-[#888]">
         {gameModule.config.displayName}
       </Text>
-      <Text className="text-center text-2xl">{currentCard?.text}</Text>
+      <Text className="text-center text-2xl dark:text-light text-dark">{currentCard?.text}</Text>
       <Pressable
-        className={`py-3.5 px-8 rounded-xl  w-3/5 ${isVoteIncomplete ? "bg-[#ccc]" : "bg-[#1d1b33]"}`}
+        className={`py-3.5 px-8 rounded-xl  w-3/5 ${isVoteIncomplete ? "bg-[#ccc]" : "dark:bg-light bg-dark"}`}
         onPress={handleNextCard}
         disabled={isVoteIncomplete}
       >
-        <Text className="text-white font-medium text-center">Next Card</Text>
+        <Text className="dark:text-dark text-light font-medium text-center">Next Card</Text>
       </Pressable>
 
       {gameModule.config.primitives.cardFlow === "solo-reveal" && (

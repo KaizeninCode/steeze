@@ -33,17 +33,17 @@ const ModeSelect = () => {
     router.push({ pathname: "/gameplay/[roomId]", params: { roomId } });
   }
   return (
-    <SafeAreaView className="flex-1 p-5 gap-16">
-      <Text className="text-center text-2xl font-semibold">Choose a game</Text>
+    <SafeAreaView className="flex-1 p-5 gap-16 dark:bg-dark bg-light">
+      <Text className="text-center text-2xl font-semibold dark:text-light text-dark">Choose a game</Text>
       <FlatList
         data={modes}
         keyExtractor={(m) => m.id}
         renderItem={({ item }) => (
           <Pressable
-            className="p-5 rounded-xl bg-[#f1efe8] mb-3"
+            className="p-5 rounded-xl dark:bg-light bg-dark mb-3"
             onPress={() => handleSelectMode(item.id)}
           >
-            <Text className="font-medium text-center">{item.displayName}</Text>
+            <Text className="font-medium text-center dark:text-dark text-light">{item.displayName}</Text>
           </Pressable>
         )}
       />

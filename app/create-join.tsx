@@ -100,41 +100,41 @@ const CreateJoinRoom = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 flex p-5 justify-center gap-5">
+    <SafeAreaView className="flex-1 flex p-5 justify-center gap-5 dark:bg-dark bg-light">
       {LOCAL_MODE_ENABLED && (
         <Pressable
-          className="px-3.5 py-6 rounded-lg bg-[#1d1b33]"
+          className="px-3.5 py-6 rounded-lg dark:bg-light bg-dark"
           onPress={handleLocalCreate}
         >
-          <Text className="text-white font-medium text-center">
+          <Text className="dark:text-dark text-light font-medium text-center">
             Play Locally (Pass the Phone)
           </Text>
         </Pressable>
       )}
       <Pressable
-        className="px-3.5 py-6 rounded-lg bg-[#1d1b33]"
+        className="px-3.5 py-6 rounded-lg dark:bg-light bg-dark w-3/5 mx-auto"
         onPress={handleOnlineCreate}
       >
-        <Text className="text-white font-medium text-center">
+        <Text className="dark:text-dark text-light font-medium text-center">
           Create Online Room
         </Text>
       </Pressable>
       <View className="flex items-center gap-3">
-        <Text className="text-slate-900 font-medium">Join Online Room</Text>
+        <Text className="dark:text-light text-dark font-medium">Join Online Room</Text>
         <TextInput
-          placeholder="Room Code"
-          placeholderTextColor="#000"
+          placeholder="Enter Room Code (5 characters)"
+          placeholderTextColor="#ccc"
           value={joinCode}
           onChangeText={setJoinCode}
           autoCapitalize="characters"
           maxLength={5}
-          className="text-center border border-[#ccc] rounded-sm p-2.5 w-full"
+          className="text-center border border-[#ccc] rounded-md mb-5 p-2.5 w-full dark:text-light text-dark"
         />
         <Pressable
-          className="px-3.5 py-6 rounded-lg bg-[#1d1b33] w-3/5"
+          className="px-3.5 py-6 rounded-lg dark:bg-light bg-dark w-3/5"
           onPress={handleJoin}
         >
-          <Text className="text-white font-medium text-center">
+          <Text className="dark:text-dark text-light font-medium text-center">
             {joining ? "Joining..." : "Join"}
           </Text>
         </Pressable>
