@@ -1,6 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 import { Player, RoundState } from "@/types";
 
+
 interface Props {
   players: Player[];
   roundState: RoundState;
@@ -13,24 +14,13 @@ export default function SoloRevealChecklist({
   onToggle,
 }: Props) {
   const responseFor = (playerId: string) => {
-    roundState.responses.find(
+    return roundState.responses.find(
       (r) =>
         r.playerId === playerId &&
         r.responseCardId === roundState.currentCardId 
     )?.text;
   };
-  const toggleValue = (answer: string) => {
-    switch (answer) {
-      case "yes":
-        return "bg-[#2e7d32]";
-        break;
-      case "no":
-        return "bg-[#c0932b]";
-        break;
-      default:
-        return 'bg-white'
-    }
-  };
+  
 
   return (
     <View className="gap-2.5 w-full">
@@ -44,13 +34,13 @@ export default function SoloRevealChecklist({
             <Text>{player.displayName}</Text>
             <View className="flex flex-row gap-5">
               <Pressable
-                className={`py-2 px-4 rounded-lg bg-[#eee] ${toggleValue}`}
+                className={`py-2 px-4 rounded-lg bg-[#eee] ${answer === "yes" ? "bg-[#2e7d32]" : "bg-[#eee]"}`}
                 onPress={() => onToggle(player.playerId, true)}
               >
                 <Text className="font-medium">Yes</Text>
               </Pressable>
               <Pressable
-                className={`py-2 px-4 rounded-lg bg-[#eee] ${toggleValue}`}
+                className={`py-2 px-4 rounded-lg bg-[#eee] ${answer === "yes" ? "bg-[#2e7d32]" : "bg-[#eee]"}`}
                 onPress={() => onToggle(player.playerId, true)}
               >
                 <Text className="font-medium">No</Text>

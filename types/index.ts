@@ -41,6 +41,7 @@ export interface GameConfig {
 
 export interface RoundState {
   roomId: string
+  cardOrder: string[]
   currentCardId: string | null
   currentReaderId: string | null
   responses: {
@@ -80,3 +81,5 @@ export interface Deck {
   cardCount: number
   createdAt: number
 }
+
+export const LOCAL_MODE_ENABLED = false

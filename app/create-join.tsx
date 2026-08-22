@@ -1,7 +1,7 @@
 import { useLocalRoomStore } from "@/state/localRoom";
-import { Room } from "@/types";
+import { LOCAL_MODE_ENABLED, Player, Room } from "@/types";
 import { generateGuestId } from "@/utils";
-import { doc, getDoc, setDoc } from "@react-native-firebase/firestore";
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "@react-native-firebase/firestore";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
@@ -28,6 +28,14 @@ const CreateJoinRoom = () => {
   const handleOnlineCreate = async () => {
     const uid = await ensureAuth();
     const roomId = generateRoomCode();
+    const hostPlayer: Player = {
+      playerId: uid,
+      displayName: "Host", // --> TODO: Add name editing, fallback to Host
+      score: 0,
+      isHost: true,
+      connected: true,
+    };
+
     const newRoom: Room = {
       id: roomId,
       hostId: uid,
@@ -37,10 +45,10 @@ const CreateJoinRoom = () => {
         mode: "online",
         activeGameId: null,
         deckIds: [],
-        playerOrder: [],
+        playerOrder: [uid],
         currentTurnIndex: 0,
       },
-      players: [],
+      players: [hostPlayer],
     };
     await setDoc(doc(firestore, "rooms", roomId), newRoom);
     router.push({ pathname: "/lobby/[roomId]", params: { roomId } });
@@ -50,7 +58,7 @@ const CreateJoinRoom = () => {
     const roomId = "local-" + generateRoomCode();
     const hostGuestId = generateGuestId();
     createLocalRoom(roomId, hostGuestId, "Host");
-    console.log("store room after create:", useLocalRoomStore.getState().room);
+    // console.log("store room after create:", useLocalRoomStore.getState().room);
     router.push({ pathname: "/lobby/[roomId]", params: { roomId } });
   };
 
@@ -59,9 +67,10 @@ const CreateJoinRoom = () => {
     setJoining(true);
     setError(null);
 
-    await ensureAuth(); // -> joiners need a uid for their entry in players[]
+    const uid = await ensureAuth(); // -> joiners need a uid for their entry in players[]
 
     const roomId = joinCode.toUpperCase();
+    const roomRef = doc(firestore, 'rooms', roomId)
     const snap = await getDoc(doc(firestore, "rooms", roomId));
     setJoining(false);
 
@@ -70,19 +79,38 @@ const CreateJoinRoom = () => {
       return;
     }
 
+    const room = snap.data() as Room;
+    const alreadyJoined = room.players.some((p) => p.playerId === uid);
+
+    if (!alreadyJoined) {
+      const newPlayer: Player = {
+        playerId: uid,
+        displayName: "Player", // --> TODO: Add name editing, fallback to Player
+        score: 0,
+        isHost: false,
+        connected: true,
+      };
+      // update only the players array
+      await updateDoc(roomRef,{players: arrayUnion(newPlayer)})
+    }
+
+    setJoining(false)
+
     router.push({ pathname: "/lobby/[roomId]", params: { roomId } });
   };
 
   return (
     <SafeAreaView className="flex-1 flex p-5 justify-center gap-5">
-      <Pressable
-        className="px-3.5 py-6 rounded-lg bg-[#1d1b33]"
-        onPress={handleLocalCreate}
-      >
-        <Text className="text-white font-medium text-center">
-          Play Locally (Pass the Phone)
-        </Text>
-      </Pressable>
+      {LOCAL_MODE_ENABLED && (
+        <Pressable
+          className="px-3.5 py-6 rounded-lg bg-[#1d1b33]"
+          onPress={handleLocalCreate}
+        >
+          <Text className="text-white font-medium text-center">
+            Play Locally (Pass the Phone)
+          </Text>
+        </Pressable>
+      )}
       <Pressable
         className="px-3.5 py-6 rounded-lg bg-[#1d1b33]"
         onPress={handleOnlineCreate}

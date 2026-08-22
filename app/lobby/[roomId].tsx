@@ -30,7 +30,7 @@ const Lobby = () => {
   const renameLocalPlayer = useLocalRoomStore((state) => state.renamePlayer);
 
   const room = isLocal ? localRoom : onlineRoomData.room;
-  console.log('lobby sees room:', room, 'isLocal:', isLocal, 'roomId:', roomId);
+  // console.log('lobby sees room:', room, 'isLocal:', isLocal, 'roomId:', roomId);
 
   const [newPlayerName, setNewPlayerName] = useState("");
 
@@ -99,7 +99,7 @@ const Lobby = () => {
             className="py-2.5 px-4 rounded-lg bg-[#1d1b33]"
             onPress={handleAddLocalPlayer}
           >
-            <Text>Add</Text>
+            <Text className="text-white">Add</Text>
           </Pressable>
         </View>
       )}
@@ -109,7 +109,7 @@ const Lobby = () => {
           className="py-2.5 px-4 rounded-lg bg-[#1d1b33]"
           onPress={handleChooseGame}
         >
-          <Text>Choose a game</Text>
+          <Text className="text-white text-center">Choose a game</Text>
         </Pressable>
       )}
       

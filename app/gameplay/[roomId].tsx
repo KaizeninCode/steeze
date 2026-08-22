@@ -1,22 +1,23 @@
 import SoloRevealChecklist from "@/components/SoloRevealChecklist";
 import { firestore } from "@/firebaseCofig";
 import { getGameModule } from "@/gameEngine";
-import { nhieMildCards } from "@/gameEngine/decks/neverHaveIEver";
+import { getDeckCards } from "@/gameEngine/decks";
 import { useRoom } from "@/hooks/useRoom";
 import { useRoundState } from "@/hooks/useRoundState";
 import { useLocalRoomStore } from "@/state/localRoom";
 import { Player, RoundState } from "@/types";
 import { doc, updateDoc } from "@react-native-firebase/firestore";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect } from "react";
-import { Pressable, Text, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 
 const Gameplay = () => {
   const { roomId } = useLocalSearchParams<{ roomId: string }>();
   const isLocal = roomId.startsWith("local-");
+  const seedingRef = useRef(false)
 
+  // ALL HOOKS, UNCONDITIONALLY IN THIS ORDER, EVERY RENDER
   const onlineRoomData = useRoom(isLocal ? null : roomId);
   const onlineRound = useRoundState(isLocal ? null : roomId);
   const localRoom = useLocalRoomStore((state) => state.room);
@@ -26,24 +27,26 @@ const Gameplay = () => {
 
   const room = isLocal ? localRoom : onlineRoomData.room;
   const roundState = isLocal ? localRoundState : onlineRound.roundState;
-
-  if (!room)
-    return (
-      <SafeAreaView className="flex-1 p-5">
-        <Text>Loading room...</Text>
-      </SafeAreaView>
-    );
-
+  const deckCards = getDeckCards(room?.settings.deckIds ?? []);
   const gameModule = getGameModule(
-    room.settings.activeGameId ?? "never-have-i-ever",
+    room?.settings.activeGameId ?? "never-have-i-ever",
   );
-  const deckCards = nhieMildCards; // -> TODO: pull from room.settings.deckIds once deck selection becomes active
 
   // initialize round state on first mount if none exists yet
   useEffect(() => {
-    if (!room || roundState) return;
-    const initial: RoundState = {
+    // console.log(
+    //   "round-init effect fired. room:",
+    //   !!room,
+    //   "roundState:",
+    //   !!roundState,
+    //   "currentCardId:",
+    //   roundState?.currentCardId,
+    // );
+    if (!room || roundState?.currentCardId || seedingRef.current) return;
+    seedingRef.current = true;
+    (async ()=> {const initial: RoundState = {
       roomId,
+      cardOrder: [],
       currentCardId: null,
       currentReaderId: room.players[0]?.playerId ?? null,
       responses: [],
@@ -52,7 +55,10 @@ const Gameplay = () => {
       roundNumber: 0,
     };
     const withFirstCard = gameModule.nextCard(deckCards, initial);
-    persistRoundState(withFirstCard);
+    // console.log("[Gameplay] seeding first round state:", withFirstCard);
+    await persistRoundState(withFirstCard);
+    seedingRef.current = false;
+  })()
   }, [room, roundState]);
 
   async function persistRoundState(next: RoundState) {
@@ -81,7 +87,7 @@ const Gameplay = () => {
 
     if (gameModule.isRoundOver(roundState, deckCards)) {
       // navigate to round end as last step
-      router.push({pathname: '/round-end/[roomId]', params: {roomId}})
+      router.push({ pathname: "/round-end/[roomId]", params: { roomId } });
       return;
     }
 
@@ -89,9 +95,23 @@ const Gameplay = () => {
     await persistRoundState(advanced);
   }
 
-  if (!room) return (
+  async function handleToggle(playerId: string, hasDone: boolean) {
+    if (!roundState) return;
+    const updated = gameModule.handleAction(roundState, playerId, { hasDone });
+    await persistRoundState(updated);
+  }
+
+  if (!room)
+    return (
       <SafeAreaView className="flex-1 p-5">
         <Text>Loading room...</Text>
+      </SafeAreaView>
+    );
+
+  if (deckCards.length === 0)
+    return (
+      <SafeAreaView className="flex-1 p-5">
+        <Text>No deck available for this game yet.</Text>
       </SafeAreaView>
     );
 
@@ -103,12 +123,6 @@ const Gameplay = () => {
     );
 
   const currentCard = deckCards.find((c) => c.id === roundState.currentCardId);
-
-  async function handleToggle(playerId: string, hasDone: boolean) {
-    if (!roundState) return;
-    const updated = gameModule.handleAction(roundState, playerId, { hasDone });
-    await persistRoundState(updated);
-  }
 
   return (
     <SafeAreaView className="flex-1 p-5 items-center justify-center gap-5">
