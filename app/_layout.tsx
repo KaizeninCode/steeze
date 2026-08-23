@@ -1,11 +1,20 @@
 import { Stack } from "expo-router";
+import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import "../global.css";
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    AlfaSlabOne: require("../assets/fonts/AlfaSlabOne-Regular.ttf"),
+    Elsie: require("../assets/fonts/Elsie-Regular.ttf"),
+    InstrumentSerif: require("../assets/fonts/InstrumentSerif-Regular.ttf"),
+  });
+
+  if (!fontsLoaded) return null;
+
   return (
     <>
-      {/* <StatusBar mode='auto'/> */}
+      <StatusBar style='auto'/>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" options={{ title: "Home" }} />
         <Stack.Screen

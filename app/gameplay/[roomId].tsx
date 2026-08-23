@@ -163,13 +163,13 @@ const Gameplay = () => {
       <Text className="text-center text-sm text-[#888]">
         {gameModule.config.displayName}
       </Text>
-      <Text className="text-center text-2xl dark:text-light text-dark">{currentCard?.text}</Text>
+      <Text className="text-center text-3xl dark:text-light text-dark font-instrument">{currentCard?.text}</Text>
       <Pressable
         className={`py-3.5 px-8 rounded-xl  w-3/5 ${isVoteIncomplete ? "bg-[#ccc]" : "dark:bg-light bg-dark"}`}
         onPress={handleNextCard}
         disabled={isVoteIncomplete}
       >
-        <Text className="dark:text-dark text-light font-medium text-center">Next Card</Text>
+        <Text className="dark:text-dark text-light font-medium text-center font-alfa">Next Card</Text>
       </Pressable>
 
       {gameModule.config.primitives.cardFlow === "solo-reveal" && (

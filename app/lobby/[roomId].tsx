@@ -70,15 +70,15 @@ const Lobby = () => {
   return (
     <SafeAreaView className="flex-1 p-5 dark:bg-dark bg-light">
       {!isLocal && (
-        <Text className="text-xl font-semibold dark:text-light text-dark">Room code: {roomId}</Text>
+        <Text className="text-2xl mb-3 font-semibold dark:text-light text-dark text-center font-alfa">Room code: {roomId}</Text>
       )}
 
       <FlatList
         data={room.players}
         keyExtractor={(p) => p.playerId}
         renderItem={({ item }) => (
-          <View className="py-2 dark:bg-light/60 bg-dark/10 rounded-xl">
-            <Text className="text-md dark:text-light text-dark">
+          <View className="py-2 dark:bg-light bg-dark rounded-xl space-y-5">
+            <Text className="text-md dark:text-dark text-light font-alfa ml-5">
               {item.displayName}
               {item.isHost ? " (host)" : ""}
             </Text>
@@ -109,7 +109,7 @@ const Lobby = () => {
           className="py-2.5 px-4 rounded-lg dark:bg-light bg-dark w-3/5 mx-auto"
           onPress={handleChooseGame}
         >
-          <Text className="dark:text-dark text-light text-center">Choose a game</Text>
+          <Text className="dark:text-dark text-light text-center font-alfa">Choose a game</Text>
         </Pressable>
       )}
       

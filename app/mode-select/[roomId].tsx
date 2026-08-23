@@ -34,7 +34,7 @@ const ModeSelect = () => {
   }
   return (
     <SafeAreaView className="flex-1 p-5 gap-16 dark:bg-dark bg-light">
-      <Text className="text-center text-2xl font-semibold dark:text-light text-dark">Choose a game</Text>
+      <Text className="text-center text-2xl font-semibold dark:text-light text-dark font-alfa">Choose a game</Text>
       <FlatList
         data={modes}
         keyExtractor={(m) => m.id}
@@ -43,7 +43,7 @@ const ModeSelect = () => {
             className="p-5 rounded-xl dark:bg-light bg-dark mb-3"
             onPress={() => handleSelectMode(item.id)}
           >
-            <Text className="font-medium text-center dark:text-dark text-light">{item.displayName}</Text>
+            <Text className="font-medium text-center dark:text-dark text-light font-alfa">{item.displayName}</Text>
           </Pressable>
         )}
       />

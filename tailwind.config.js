@@ -4,9 +4,10 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
-      backgroundColor: {
-        light: '#fde047',
-        dark: '#000',
+      fontFamily: {
+        alfa: ['AlfaSlabOne', 'sans-serif'],
+        elsie: ['Elsie', 'sans-serif'],
+        instrument: ['InstrumentSerif', 'serif'],
       },
       colors: {
         light: '#fde047',

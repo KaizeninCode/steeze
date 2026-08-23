@@ -106,7 +106,7 @@ const CreateJoinRoom = () => {
           className="px-3.5 py-6 rounded-lg dark:bg-light bg-dark"
           onPress={handleLocalCreate}
         >
-          <Text className="dark:text-dark text-light font-medium text-center">
+          <Text className="dark:text-dark text-light font-medium text-center font-alfa">
             Play Locally (Pass the Phone)
           </Text>
         </Pressable>
@@ -115,26 +115,26 @@ const CreateJoinRoom = () => {
         className="px-3.5 py-6 rounded-lg dark:bg-light bg-dark w-3/5 mx-auto"
         onPress={handleOnlineCreate}
       >
-        <Text className="dark:text-dark text-light font-medium text-center">
+        <Text className="dark:text-dark text-light font-medium text-center font-alfa">
           Create Online Room
         </Text>
       </Pressable>
       <View className="flex items-center gap-3">
-        <Text className="dark:text-light text-dark font-medium">Join Online Room</Text>
+        <Text className="dark:text-light text-dark font-medium font-alfa text-xl">Join Online Room</Text>
         <TextInput
           placeholder="Enter Room Code (5 characters)"
-          placeholderTextColor="#ccc"
+          placeholderTextColor="#777"
           value={joinCode}
           onChangeText={setJoinCode}
           autoCapitalize="characters"
           maxLength={5}
-          className="text-center border border-[#ccc] rounded-md mb-5 p-2.5 w-full dark:text-light text-dark"
+          className="text-center border dark:border-[#ccc] border-dark rounded-md mb-5 p-2.5 w-full dark:text-light text-dark"
         />
         <Pressable
           className="px-3.5 py-6 rounded-lg dark:bg-light bg-dark w-3/5"
           onPress={handleJoin}
         >
-          <Text className="dark:text-dark text-light font-medium text-center">
+          <Text className="dark:text-dark text-light font-medium text-center font-alfa">
             {joining ? "Joining..." : "Join"}
           </Text>
         </Pressable>
