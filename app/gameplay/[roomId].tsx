@@ -1,5 +1,6 @@
 import PromptResponsePicker from "@/components/PromptResponsePicker";
 import SoloRevealChecklist from "@/components/SoloRevealChecklist";
+import SubjectGuessPicker from "@/components/SubjectGuessPicker";
 import VoteList from "@/components/VoteList";
 import { auth, firestore } from "@/firebaseCofig";
 import { getGameModule } from "@/gameEngine";
@@ -11,7 +12,7 @@ import { Player, RoundState } from "@/types";
 import { doc, updateDoc } from "@react-native-firebase/firestore";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef } from "react";
-import { Pressable, Text } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Gameplay = () => {
@@ -33,6 +34,12 @@ const Gameplay = () => {
   const gameModule = getGameModule(
     room?.settings.activeGameId ?? "never-have-i-ever",
   );
+  const isGuessIncomplete = gameModule.config.primitives.cardFlow === 'guess-reveal' && 
+  (!roundState?.subjectAnswerText || 
+    room?.players
+      .filter(p => p.playerId !== roundState.currentReaderId)
+      .some(p => !roundState.responses.some(r => r.playerId === p.playerId && r.responseCardId === roundState.currentCardId))
+  )
 
   // initialize round state on first mount if none exists yet
   useEffect(() => {
@@ -57,8 +64,9 @@ const Gameplay = () => {
         votes: [],
         timerEndsAt: null,
         roundNumber: 0,
+        subjectAnswerText: null
       };
-      const withFirstCard = gameModule.nextCard(deckCards, initial);
+      const withFirstCard = gameModule.nextCard(deckCards, initial, room.players);
       // console.log("[Gameplay] seeding first round state:", withFirstCard);
       await persistRoundState(withFirstCard);
       seedingRef.current = false;
@@ -96,7 +104,7 @@ const Gameplay = () => {
       return;
     }
 
-    const advanced = gameModule.nextCard(deckCards, roundState);
+    const advanced = gameModule.nextCard(deckCards, roundState, room.players);
     // console.log("BEFORE advance, currentCardId was:", roundState.currentCardId);
     // console.log("AFTER advance, currentCardId is:", advanced.currentCardId);
     // console.log("advanced.usedCardIds:", advanced.usedCardIds);
@@ -125,6 +133,14 @@ const Gameplay = () => {
     await persistRoundState(updated);
   }
 
+  async function handleSubjectOrGuess(text:string) {
+    if (!roundState) return
+    const uid = auth.currentUser?.uid
+    if (!uid) return
+    const updated = gameModule.handleAction(roundState, uid, {text})
+    await persistRoundState(updated)
+  }
+
   if (!room)
     return (
       <SafeAreaView className="flex-1 p-5">
@@ -150,6 +166,8 @@ const Gameplay = () => {
     gameModule.config.primitives.cardFlow === "vote" &&
     roundState!.votes.length < room!.players.length;
 
+  const isNextCardDisabled = isVoteIncomplete || isGuessIncomplete
+
   // console.log("deckIds:", room.settings.deckIds);
   // console.log("deckCards.length:", deckCards.length);
   // console.log("roundState.currentCardId:", roundState.currentCardId);
@@ -163,13 +181,19 @@ const Gameplay = () => {
       <Text className="text-center text-sm text-[#888]">
         {gameModule.config.displayName}
       </Text>
-      <Text className="text-center text-3xl dark:text-light text-dark font-instrument">{currentCard?.text}</Text>
+      <View className="border dark:border-light border-dark p-5 rounded-xl">
+        <Text className="text-center text-3xl dark:text-light text-dark font-instrument">
+          {currentCard?.text}
+        </Text>
+      </View>
       <Pressable
-        className={`py-3.5 px-8 rounded-xl  w-3/5 ${isVoteIncomplete ? "bg-[#ccc]" : "dark:bg-light bg-dark"}`}
+        className={`py-3.5 px-8 rounded-xl  w-3/5 ${isNextCardDisabled ? "bg-[#ccc]" : "dark:bg-light bg-dark"}`}
         onPress={handleNextCard}
-        disabled={isVoteIncomplete}
+        disabled={isNextCardDisabled}
       >
-        <Text className="dark:text-dark text-light font-medium text-center font-alfa">Next Card</Text>
+        <Text className="dark:text-dark text-light font-medium text-center font-alfa">
+          Next Card
+        </Text>
       </Pressable>
 
       {gameModule.config.primitives.cardFlow === "solo-reveal" && (
@@ -198,6 +222,16 @@ const Gameplay = () => {
         <PromptResponsePicker
           players={room.players}
           onSubmit={handleTruthResponse}
+          roundState={roundState}
+        />
+      )}
+
+      {gameModule.config.primitives.cardFlow === "guess-reveal" && currentCard &&(
+        <SubjectGuessPicker
+          currentCard={currentCard}
+          currentPlayerId={auth.currentUser?.uid}
+          players={room.players}
+          onSubmit={handleSubjectOrGuess}
           roundState={roundState}
         />
       )}

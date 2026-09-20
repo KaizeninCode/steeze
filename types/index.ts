@@ -21,10 +21,10 @@ export type Player = {
   connected: boolean,
 }
 
-export type CardFlow = 'solo-reveal' | 'prompt-response' | 'vote'
+export type CardFlow = 'solo-reveal' | 'prompt-response' | 'vote' | 'guess-reveal'
 export type ScoringMode = 'none' | 'penalty-count' | 'points' | 'timer-race' | 'rule-trigger'
 export type TurnStructure = 'rotate-reader' | 'simutaneous' | 'free-for-all'
-export type CardType = 'statement' | 'prompt' | 'response' | 'rule' | 'trivia'
+export type CardType = 'statement' | 'prompt' | 'response' | 'rule' | 'trivia' | 'guess'
 
 export interface GameConfig {
   id: string
@@ -56,6 +56,7 @@ export interface RoundState {
   usedCardIds: string[]
   timerEndsAt: number | null
   roundNumber: number
+  subjectAnswerText: string | null// --> ground truth for current card in HowWellDoYouKnowMe
 }
 
 export interface Card {
@@ -66,7 +67,8 @@ export interface Card {
   metadata?: {
     category?: string | null // for trivia/categories, later
     ruleAction?: string | null // for kings cup, later
-    pairsWithType: CardType | null // for CAH prompt-style linking, later
+    pairsWithType?: CardType | null // for CAH prompt-style linking, later
+    choices?: string[] | null // multiple choice options for guess-reveal
   }
 }
 

@@ -1,4 +1,5 @@
 import { GameModule } from './GameModule';
+import { howWellDoYouKnowMeModule } from './modules/howWellDoYouKnowMe';
 import { mostLikelyToModule } from './modules/mostLikelyTo';
 import { neverHaveIEverModule } from './modules/neverHaveIEver';
 import { truthOrDrinkModule } from './modules/truthOrDrink';
@@ -7,6 +8,7 @@ const registry: Record<string, GameModule> = {
   'never-have-i-ever': neverHaveIEverModule,
   'most-likely-to': mostLikelyToModule,
   'truth-or-drink': truthOrDrinkModule,
+  'how-well-do-you-know-me': howWellDoYouKnowMeModule,
 } 
 
 export function getGameModule(gameId: string): GameModule {

@@ -75,9 +75,10 @@ const RoundEnd = () => {
       votes: [],
       timerEndsAt: null,
       roundNumber: 0,
+      subjectAnswerText: null
     };
 
-    const dealt = gameModule.nextCard(deckCards, fresh);
+    const dealt = gameModule.nextCard(deckCards, fresh, room!.players);
     // console.log('[RoundEnd] dealt:', dealt);
     await persistRoundState(dealt);
 
@@ -100,6 +101,12 @@ const RoundEnd = () => {
       await onlineRound.deleteRoundState();
     }
     router.push({ pathname: "/mode-select/[roomId]", params: { roomId } });
+  }
+
+  // scores reset to zero, then off to pick a new mode
+  async function handleGoHome() {
+    
+    router.push("/");
   }
 
   const ranked = [...room.players].sort((a, b) => b.score - a.score);
@@ -125,6 +132,9 @@ const RoundEnd = () => {
       </Pressable>
       <Pressable className="py-3 items-center" onPress={handleSwitchGame}>
         <Text className="dark:text-light text-dark font-medium font-alfa">Switch Game</Text>
+      </Pressable>
+      <Pressable className="py-3 items-center" onPress={handleGoHome}>
+        <Text className="dark:text-light text-dark font-medium font-alfa">Go to Main Screen</Text>
       </Pressable>
     </SafeAreaView>
   );

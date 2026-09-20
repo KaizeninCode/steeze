@@ -40,6 +40,17 @@ export const GAME_CONFIGS: Record<string, GameConfig> = {
     penaltyLabel: 'Drink / Point',
     roundEndCondition: 'deckExhausted'
   },
+  'how-well-do-you-know-me': {
+    id: 'how-well-do-you-know-me',
+    displayName: 'How Well Do You Know Me',
+    primitives: {
+      cardFlow: 'guess-reveal',
+      scoring: 'points',
+      turnStructure: 'rotate-reader'
+    },
+    cardTypeRequired: 'guess',
+    roundEndCondition: 'deckExhausted'
+  },
 }
 
-export const V1_GAME_IDS = ['never-have-i-ever', 'most-likely-to', 'truth-or-drink']
+export const V1_GAME_IDS = ['never-have-i-ever', 'most-likely-to', 'truth-or-drink', 'how-well-do-you-know-me']

@@ -23,7 +23,7 @@ export default function SoloRevealChecklist({
   
 
   return (
-    <View className="gap-2.5 w-full">
+    <View className="gap-2.5 w-full shadow-sm dark:shadow-light shadow-dark rounded-xl p-5 mt-auto">
       {players.map((player) => {
         const answer = responseFor(player.playerId);
         return (
@@ -37,13 +37,13 @@ export default function SoloRevealChecklist({
                 className={`py-2 px-4 rounded-lg ${answer === "yes" ? "dark:bg-light bg-dark" : "bg-[#eee]"}`}
                 onPress={() => onToggle(player.playerId, true)}
               >
-                <Text className="font-medium dark:text-dark text-light font-alfa">Yes</Text>
+                <Text className="font-medium dark:text-dark text-light font-alfa">I have</Text>
               </Pressable>
               <Pressable
                 className={`py-2 px-4 rounded-lg ${answer === "no" ? "dark:bg-light bg-dark" : "bg-[#eee]"}`}
                 onPress={() => onToggle(player.playerId, true)}
               >
-                <Text className="font-medium dark:text-dark text-light font-alfa">No</Text>
+                <Text className="font-medium dark:text-dark text-light font-alfa">I haven't</Text>
               </Pressable>
             </View>
           </View>

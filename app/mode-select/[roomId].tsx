@@ -6,7 +6,7 @@ import { GAME_CONFIGS, V1_GAME_IDS } from "@/utils";
 import { doc, updateDoc } from "@react-native-firebase/firestore";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
-import { FlatList, Pressable, Text } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ModeSelect = () => {
@@ -33,20 +33,24 @@ const ModeSelect = () => {
     router.push({ pathname: "/gameplay/[roomId]", params: { roomId } });
   }
   return (
-    <SafeAreaView className="flex-1 p-5 gap-16 dark:bg-dark bg-light">
-      <Text className="text-center text-2xl font-semibold dark:text-light text-dark font-alfa">Choose a game</Text>
-      <FlatList
-        data={modes}
-        keyExtractor={(m) => m.id}
-        renderItem={({ item }) => (
-          <Pressable
-            className="p-5 rounded-xl dark:bg-light bg-dark mb-3"
-            onPress={() => handleSelectMode(item.id)}
-          >
-            <Text className="font-medium text-center dark:text-dark text-light font-alfa">{item.displayName}</Text>
-          </Pressable>
-        )}
-      />
+    <SafeAreaView className="flex-1 p-5 gap-5 dark:bg-dark bg-light">
+      <Text className="text-center text-2xl font-semibold dark:text-light text-dark font-alfa">
+        Choose a game
+      </Text>
+        <FlatList
+          data={modes}
+          keyExtractor={(m) => m.id}
+          renderItem={({ item }) => (
+            <Pressable
+              className="p-5 rounded-xl dark:bg-light bg-dark mb-5 aspect-square"
+              onPress={() => handleSelectMode(item.id)}
+            >
+              <Text className="font-medium text-center dark:text-dark text-light font-alfa">
+                {item.displayName}
+              </Text>
+            </Pressable>
+          )}
+        />
     </SafeAreaView>
   );
 };
