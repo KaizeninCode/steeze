@@ -1,3 +1,4 @@
+import { compatibilityFlags } from 'react-native-screens';
 import { GameConfig } from './../types/index';
 
 export function generateGuestId(): string {
@@ -15,7 +16,8 @@ export const GAME_CONFIGS: Record<string, GameConfig> = {
     },
     cardTypeRequired: 'statement',
     penaltyLabel: 'Drink / Point',
-    roundEndCondition: 'deckExhausted'
+    roundEndCondition: 'deckExhausted',
+    pricing: {isFree: true, productId: null},
   },
   'most-likely-to': {
     id: 'most-likely-to',
@@ -26,7 +28,8 @@ export const GAME_CONFIGS: Record<string, GameConfig> = {
       turnStructure: 'rotate-reader'
     },
     cardTypeRequired: 'prompt',
-    roundEndCondition: 'deckExhausted'
+    roundEndCondition: 'deckExhausted',
+    pricing: {isFree: false, productId: 'com.steeze.mostlikelyto'},
   },
   'truth-or-drink': {
     id: 'truth-or-drink',
@@ -38,7 +41,8 @@ export const GAME_CONFIGS: Record<string, GameConfig> = {
     },
     cardTypeRequired: 'prompt',
     penaltyLabel: 'Drink / Point',
-    roundEndCondition: 'deckExhausted'
+    roundEndCondition: 'deckExhausted',
+    pricing: {isFree: false, productId: 'com.steeze.truthordrink'},
   },
   'how-well-do-you-know-me': {
     id: 'how-well-do-you-know-me',
@@ -49,7 +53,8 @@ export const GAME_CONFIGS: Record<string, GameConfig> = {
       turnStructure: 'rotate-reader'
     },
     cardTypeRequired: 'guess',
-    roundEndCondition: 'deckExhausted'
+    roundEndCondition: 'deckExhausted',
+    pricing: {isFree: false, productId: 'com.steeze.howwelldoyouknowme'},
   },
 }
 

@@ -64,21 +64,21 @@ const Lobby = () => {
   }
 
   function handleChooseGame() {
-    router.push({ pathname: "/mode-select/[roomId]", params: { roomId } });
+    router.push({ pathname: "/home/mode-select/[roomId]", params: { roomId } });
   }
 
   return (
-    <SafeAreaView className="flex-1 p-5 dark:bg-dark bg-light">
+    <SafeAreaView className="flex-1 p-5 bg-dark">
       {!isLocal && (
-        <Text className="text-2xl mb-3 font-semibold dark:text-light text-dark text-center font-alfa">Room code: {roomId}</Text>
+        <Text className="text-2xl mb-3 font-semibold text-light text-center font-alfa">Room code: {roomId}</Text>
       )}
 
       <FlatList
         data={room.players}
         keyExtractor={(p) => p.playerId}
         renderItem={({ item }) => (
-          <View className="py-2 dark:bg-light bg-dark rounded-xl space-y-5">
-            <Text className="text-md dark:text-dark text-light font-alfa ml-5">
+          <View className="py-2 bg-light rounded-xl space-y-5">
+            <Text className="text-md text-dark font-alfa ml-5">
               {item.displayName}
               {item.isHost ? " (host)" : ""}
             </Text>
@@ -96,20 +96,20 @@ const Lobby = () => {
             className="flex-1 border border-[#ccc] rounded-lg p-2.5"
           />
           <Pressable
-            className="py-2.5 px-4 rounded-lg dark:bg-light bg-dark"
+            className="py-2.5 px-4 rounded-lg bg-light"
             onPress={handleAddLocalPlayer}
           >
-            <Text className="dark:text-light text-dark">Add</Text>
+            <Text className="text-light">Add</Text>
           </Pressable>
         </View>
       )}
 
       {isHost && (
         <Pressable
-          className="py-2.5 px-4 rounded-lg dark:bg-light bg-dark w-3/5 mx-auto"
+          className="py-2.5 px-4 rounded-lg bg-light w-3/5 mx-auto"
           onPress={handleChooseGame}
         >
-          <Text className="dark:text-dark text-light text-center font-alfa">Choose a game</Text>
+          <Text className="text-dark text-center font-alfa">Choose a game</Text>
         </Pressable>
       )}
       

@@ -87,7 +87,7 @@ const RoundEnd = () => {
     } else {
       await onlineRound.deleteRoundState();
     }
-    router.push({ pathname: "/gameplay/[roomId]", params: { roomId } });
+    router.push({ pathname: "/home/gameplay/[roomId]", params: { roomId } });
   }
 
   // scores reset to zero, then off to pick a new mode
@@ -100,41 +100,41 @@ const RoundEnd = () => {
     } else {
       await onlineRound.deleteRoundState();
     }
-    router.push({ pathname: "/mode-select/[roomId]", params: { roomId } });
+    router.push({ pathname: "/home/mode-select/[roomId]", params: { roomId } });
   }
 
   // scores reset to zero, then off to pick a new mode
   async function handleGoHome() {
     
-    router.push("/");
+    router.push("/home");
   }
 
   const ranked = [...room.players].sort((a, b) => b.score - a.score);
 
   return (
-    <SafeAreaView className="flex-1 p-5 gap-4 dark:bg-dark bg-light">
-      <Text className="text-center text-3xl dark:text-light text-dark font-alfa">Round Complete</Text>
+    <SafeAreaView className="flex-1 p-5 gap-4 bg-dark">
+      <Text className="text-center text-3xl text-light font-alfa">Round Complete</Text>
       <FlatList
         data={ranked}
         keyExtractor={(p) => p.playerId}
         renderItem={({ item }) => (
           <View className="flex flex-row gap-5 items-center py-2">
-            <Text className="dark:text-light text-dark font-alfa">{item.displayName}</Text>
-            <Text className="font-semibold dark:text-light text-dark font-alfa">{item.score}</Text>
+            <Text className="text-light font-alfa">{item.displayName}</Text>
+            <Text className="font-semibold text-light font-alfa">{item.score}</Text>
           </View>
         )}
       />
       <Pressable
-        className="py-3 rounded-xl dark:bg-light bg-dark items-center w-3/5 mx-auto"
+        className="py-3 rounded-xl bg-light items-center w-3/5 mx-auto"
         onPress={handlePlayAgain}
       >
-        <Text className="dark:text-dark text-light font-medium font-alfa">Play Another Round</Text>
+        <Text className="text-dark font-medium font-alfa">Play Another Round</Text>
       </Pressable>
       <Pressable className="py-3 items-center" onPress={handleSwitchGame}>
-        <Text className="dark:text-light text-dark font-medium font-alfa">Switch Game</Text>
+        <Text className="text-light font-medium font-alfa">Switch Game</Text>
       </Pressable>
       <Pressable className="py-3 items-center" onPress={handleGoHome}>
-        <Text className="dark:text-light text-dark font-medium font-alfa">Go to Main Screen</Text>
+        <Text className="text-light font-medium font-alfa">Go to Main Screen</Text>
       </Pressable>
     </SafeAreaView>
   );

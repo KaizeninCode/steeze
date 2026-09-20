@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ensureAuth, firestore } from "../firebaseCofig";
+import { ensureAuth, firestore } from "@/firebaseCofig";
 
 function generateRoomCode(): string {
   // short, human-readable characters. avoid ambiguaous characters like 0/O, I/1
@@ -51,7 +51,7 @@ const CreateJoinRoom = () => {
       players: [hostPlayer],
     };
     await setDoc(doc(firestore, "rooms", roomId), newRoom);
-    router.push({ pathname: "/lobby/[roomId]", params: { roomId } });
+    router.push({ pathname: "/home/lobby/[roomId]", params: { roomId } });
   };
 
   const handleLocalCreate = async () => {
@@ -59,7 +59,7 @@ const CreateJoinRoom = () => {
     const hostGuestId = generateGuestId();
     createLocalRoom(roomId, hostGuestId, "Host");
     // console.log("store room after create:", useLocalRoomStore.getState().room);
-    router.push({ pathname: "/lobby/[roomId]", params: { roomId } });
+    router.push({ pathname: "/home/lobby/[roomId]", params: { roomId } });
   };
 
   const handleJoin = async () => {
@@ -96,31 +96,31 @@ const CreateJoinRoom = () => {
 
     setJoining(false)
 
-    router.push({ pathname: "/lobby/[roomId]", params: { roomId } });
+    router.push({ pathname: "/home/lobby/[roomId]", params: { roomId } });
   };
 
   return (
-    <SafeAreaView className="flex-1 flex p-5 justify-center gap-5 dark:bg-dark bg-light">
+    <SafeAreaView className="flex-1 flex p-5 justify-center gap-5 bg-dark">
       {LOCAL_MODE_ENABLED && (
         <Pressable
-          className="px-3.5 py-6 rounded-lg dark:bg-light bg-dark"
+          className="px-3.5 py-6 rounded-lg bg-light"
           onPress={handleLocalCreate}
         >
-          <Text className="dark:text-dark text-light font-medium text-center font-alfa">
+          <Text className="text-dark font-medium text-center font-alfa">
             Play Locally (Pass the Phone)
           </Text>
         </Pressable>
       )}
       <Pressable
-        className="px-3.5 py-6 rounded-lg dark:bg-light bg-dark w-3/5 mx-auto"
+        className="px-3.5 py-6 rounded-lg bg-light w-3/5 mx-auto"
         onPress={handleOnlineCreate}
       >
-        <Text className="dark:text-dark text-light font-medium text-center font-alfa">
+        <Text className="text-dark font-medium text-center font-alfa">
           Create Online Room
         </Text>
       </Pressable>
       <View className="flex items-center gap-3">
-        <Text className="dark:text-light text-dark font-medium font-alfa text-xl">Join Online Room</Text>
+        <Text className="text-light font-medium font-alfa text-xl">Join Online Room</Text>
         <TextInput
           placeholder="Enter Room Code (5 characters)"
           placeholderTextColor="#777"
@@ -128,13 +128,13 @@ const CreateJoinRoom = () => {
           onChangeText={setJoinCode}
           autoCapitalize="characters"
           maxLength={5}
-          className="text-center border dark:border-[#ccc] border-dark rounded-md mb-5 p-2.5 w-full dark:text-light text-dark"
+          className="text-center border border-[#ccc] rounded-md mb-5 p-2.5 w-full text-light"
         />
         <Pressable
-          className="px-3.5 py-6 rounded-lg dark:bg-light bg-dark w-3/5"
+          className="px-3.5 py-6 rounded-lg bg-light w-3/5"
           onPress={handleJoin}
         >
-          <Text className="dark:text-dark text-light font-medium text-center font-alfa">
+          <Text className="text-dark font-medium text-center font-alfa">
             {joining ? "Joining..." : "Join"}
           </Text>
         </Pressable>

@@ -100,7 +100,7 @@ const Gameplay = () => {
 
     if (gameModule.isRoundOver(roundState, deckCards)) {
       // navigate to round end as last step
-      router.push({ pathname: "/round-end/[roomId]", params: { roomId } });
+      router.push({ pathname: "/home/round-end/[roomId]", params: { roomId } });
       return;
     }
 
@@ -177,21 +177,21 @@ const Gameplay = () => {
   // console.log("currentCard:", currentCard);
 
   return (
-    <SafeAreaView className="flex-1 p-5 items-center justify-center gap-5 dark:bg-dark bg-light">
+    <SafeAreaView className="flex-1 p-5 items-center justify-center gap-5 bg-dark">
       <Text className="text-center text-sm text-[#888]">
         {gameModule.config.displayName}
       </Text>
-      <View className="border dark:border-light border-dark p-5 rounded-xl">
-        <Text className="text-center text-3xl dark:text-light text-dark font-instrument">
+      <View className="border border-light p-5 rounded-xl">
+        <Text className="text-center text-3xl text-light font-instrument">
           {currentCard?.text}
         </Text>
       </View>
       <Pressable
-        className={`py-3.5 px-8 rounded-xl  w-3/5 ${isNextCardDisabled ? "bg-[#ccc]" : "dark:bg-light bg-dark"}`}
+        className={`py-3.5 px-8 rounded-xl  w-3/5 ${isNextCardDisabled ? "bg-[#ccc]" : "bg-light"}`}
         onPress={handleNextCard}
         disabled={isNextCardDisabled}
       >
-        <Text className="dark:text-dark text-light font-medium text-center font-alfa">
+        <Text className="text-dark font-medium text-center font-alfa">
           Next Card
         </Text>
       </Pressable>

@@ -27,5 +27,13 @@ service cloud.firestore {
           request.auth.uid == get(/databases/$(database)/documents/decks/$(deckId)).data.ownerId;
       }
     }
+
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId &&
+        request.resource.data.ownedGameIds.size() == 0; // can only ever be created empty
+      allow update: if request.auth != null && request.auth.uid == userId &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['ownedGameIds']);
+}
   }
 }

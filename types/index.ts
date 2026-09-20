@@ -36,7 +36,8 @@ export interface GameConfig {
   }
   cardTypeRequired: CardType
   penaltyLabel?: string
-  roundEndCondition: 'deckExhausted' | 'turnLimit' | 'timeLimit'
+  roundEndCondition: 'deckExhausted' | 'turnLimit' | 'timeLimit',
+  pricing?: {isFree: boolean, productId: string | null}
 }
 
 export interface RoundState {
@@ -86,3 +87,9 @@ export interface Deck {
 }
 
 export const LOCAL_MODE_ENABLED = false
+
+export interface User {
+  uid: string
+  ownedGameIds: string[]
+  createdAt: number
+}
