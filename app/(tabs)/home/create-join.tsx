@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ensureAuth, firestore } from "@/firebaseCofig";
+import HorizontalDivider from "@/components/HorizontalDivider";
 
 function generateRoomCode(): string {
   // short, human-readable characters. avoid ambiguaous characters like 0/O, I/1
@@ -119,6 +120,7 @@ const CreateJoinRoom = () => {
           Create Online Room
         </Text>
       </Pressable>
+      <HorizontalDivider/>
       <View className="flex items-center gap-3">
         <Text className="text-light font-medium font-alfa text-xl">Join Online Room</Text>
         <TextInput
